@@ -19,7 +19,7 @@ jobs:
 
       - name: Compile Application Package
         run: |
-          git clone --depth=1 https://github.com compiler
+          git clone --depth=1 https://github.com compiler/callor/Web2App-android.git
           cd compiler
           echo '{"url": "https://perchance.org", "clearCache": true}' > app/src/main/assets/web2app.json
           chmod +x gradlew
