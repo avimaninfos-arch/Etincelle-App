@@ -19,11 +19,9 @@ jobs:
 
       - name: Compile Application Package
         run: |
-          wget https://github.com
-          unzip master.zip
-          mv Web2App-android-master compiler
+          https://github.com/callor/Web2App-android.git
           cd compiler
-          sed -i 's|http://localhost:8080|https://perchance.org|g' app/src/main/assets/web2app.json
+          echo '{"url": "https://perchance.org", "clearCache": true}' > app/src/main/assets/web2app.json
           chmod +x gradlew
           ./gradlew assembleDebug
 
