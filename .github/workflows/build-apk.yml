@@ -19,7 +19,9 @@ jobs:
 
       - name: Compile Application Package
         run: |
-          git clone https://github.com compiler
+          wget https://github.com
+          unzip master.zip
+          mv Web2App-android-master compiler
           cd compiler
           sed -i 's|http://localhost:8080|https://perchance.org|g' app/src/main/assets/web2app.json
           chmod +x gradlew
