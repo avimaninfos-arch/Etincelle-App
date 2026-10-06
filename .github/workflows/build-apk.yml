@@ -8,25 +8,29 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v4
 
-      - name: Setup Java JDK
-        uses: actions/setup-java@v4
+      - name: Set up NodeJS Engine
+        uses: actions/setup-node@v4
         with:
-          java-version: '17'
-          distribution: 'temurin'
+          node-version: '20'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Install Cordova CLI
+        run: npm install -g cordova
 
-      - name: Compile Application Package
+      - name: Create Clean Application Container
         run: |
-          git clone --depth=1 https://github.com compiler/callor/Web2App-android.git
-          cd compiler
-          echo '{"url": "https://perchance.org", "clearCache": true}' > app/src/main/assets/web2app.json
-          chmod +x gradlew
-          ./gradlew assembleDebug
+          cordova create etincelle_app com.aviman.etincelle Etincelle
+          cd etincelle_app
+          cordova platform add android --no-telemetry
+          echo '{"url": "https://perchance.org", "clearCache": true}' > www/manifest.json
+          echo '<widget id="com.aviman.etincelle" version="1.0.0" xmlns="http://w3.org"><name>Etincelle</name><content src="https://perchance.org#" /><preference name="FullScreen" value="true" /><preference name="Orientation" value="default" /></widget>' > config.xml
 
-      - name: Upload APK Product
+      - name: Compile Lightweight Android Package
+        run: |
+          cd etincelle_app
+          cordova build android --device --release
+
+      - name: Upload Clean APK Product
         uses: actions/upload-artifact@v4
         with:
           name: Etincelle-APK
-          path: compiler/app/build/outputs/apk/debug/app-debug.apk
+          path: etincelle_app/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk
