@@ -17,15 +17,11 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Download Web2App Compiler
+      - name: Compile Application Package
         run: |
           git clone https://github.com compiler
           cd compiler
           sed -i 's|http://localhost:8080|https://perchance.org|g' app/src/main/assets/web2app.json
-
-      - name: Build APK Final
-        run: |
-          cd compiler
           chmod +x gradlew
           ./gradlew assembleDebug
 
